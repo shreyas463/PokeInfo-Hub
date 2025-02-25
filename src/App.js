@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Container, Typography, Grid, Box } from '@mui/material';
+import { Container, Typography, Grid, Box, TextField, Button } from '@mui/material';
 import SearchBar from './components/SearchBar';
 import PokemonInfo from './components/PokemonInfo';
 import PokemonCard from './components/PokemonCard';
-import backgroundImage from './poke.jpg';
+import './App.css';
 
 const POKEMON_TCG_API_KEY = 'db932cee-4682-406c-8e11-3c5c32cce377';
 
 function App() {
   const [pokemonData, setPokemonData] = useState(null);
   const [cardData, setCardData] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const handleSearch = async (searchTerm) => {
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!searchTerm) return;
+
     try {
       // Fetch Pokemon data from PokeAPI
       const pokemonResponse = await axios.get(
@@ -38,45 +42,45 @@ function App() {
   };
 
   return (
-    <Box sx={{
-      minHeight: '100vh',
-      backgroundImage: `url(${backgroundImage})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat'
-    }}>
-      <Container maxWidth="lg" sx={{ pt: 4 }}>
-        <Box sx={{ 
-          my: 4, 
-          textAlign: 'center',
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-          borderRadius: 2,
-          p: 3
-        }}>
-          <Typography variant="h3" component="h1" gutterBottom>
-            Pokemon Info Hub
-          </Typography>
-          <Typography variant="h6" color="text.secondary" gutterBottom>
-            Search for Pokemon and their Trading Cards
-          </Typography>
-        </Box>
-        
-        <SearchBar onSearch={handleSearch} />
-        
-        <Grid container spacing={3}>
-          {pokemonData && (
-            <Grid item xs={12} md={6}>
-              <PokemonInfo pokemon={pokemonData} />
-            </Grid>
-          )}
-          {cardData && (
-            <Grid item xs={12} md={6}>
-              <PokemonCard card={cardData} />
-            </Grid>
-          )}
-        </Grid>
-      </Container>
-    </Box>
+    <div className="App">
+      <div className="search-container">
+        <h1>Pokemon Info Hub</h1>
+        <form onSubmit={handleSearch}>
+          <TextField
+            className="search-box"
+            variant="outlined"
+            placeholder="Search for Pokemon and their Trading Cards"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            fullWidth
+          />
+          <Button
+            className="search-button"
+            type="submit"
+            variant="contained"
+          >
+            Search
+          </Button>
+        </form>
+      </div>
+
+      {(pokemonData || cardData) && (
+        <Container maxWidth="lg" sx={{ mt: 4, bgcolor: 'rgba(255, 255, 255, 0.9)', borderRadius: 2, p: 3 }}>
+          <Grid container spacing={3}>
+            {pokemonData && (
+              <Grid item xs={12} md={6}>
+                <PokemonInfo pokemon={pokemonData} />
+              </Grid>
+            )}
+            {cardData && (
+              <Grid item xs={12} md={6}>
+                <PokemonCard card={cardData} />
+              </Grid>
+            )}
+          </Grid>
+        </Container>
+      )}
+    </div>
   );
 }
 
