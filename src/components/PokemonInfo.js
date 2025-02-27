@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Card, CardContent, Typography, Chip, Box, Button, Collapse } from '@mui/material';
-import ThreeDRotationIcon from '@mui/icons-material/ThreeDRotation';
+import { Card, CardContent, Typography, Box, Chip, Button, Collapse, IconButton } from '@mui/material';
 import Pokemon3DViewer from './Pokemon3DViewer';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import ThreeDRotationIcon from '@mui/icons-material/ThreeDRotation';
+import { playPokemonCry, playUISound } from '../utils/soundUtils';
 
 // Type color mapping
 const typeColors = {
@@ -59,14 +61,32 @@ const PokemonInfo = ({ pokemon }) => {
   return (
     <Card className="pokemon-info-card">
       <CardContent className="pokemon-info-content">
-        <div className="pokemon-header">
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
           <Typography variant="h4" className="pokemon-name">
             {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}
           </Typography>
-          <Typography variant="h6" className="pokemon-id">
-            #{pokemon.id}
-          </Typography>
-        </div>
+          <Box>
+            <IconButton 
+              color="primary" 
+              onClick={() => {
+                playPokemonCry(pokemon.id);
+                playUISound('click');
+              }}
+              className="sound-button"
+              title="Play Pokémon cry"
+            >
+              <VolumeUpIcon />
+            </IconButton>
+            <Button 
+              variant="contained" 
+              className="view-3d-button"
+              startIcon={<ThreeDRotationIcon />}
+              onClick={() => setShow3DViewer(!show3DViewer)}
+            >
+              {show3DViewer ? 'Hide 3D Model' : 'View 3D Model'}
+            </Button>
+          </Box>
+        </Box>
         
         <div className="pokemon-images">
           <div className="sprite-container">
@@ -100,15 +120,6 @@ const PokemonInfo = ({ pokemon }) => {
             )}
           </div>
         </div>
-        
-        <Button 
-          variant="contained" 
-          className="view-3d-button"
-          startIcon={<ThreeDRotationIcon />}
-          onClick={() => setShow3DViewer(!show3DViewer)}
-        >
-          {show3DViewer ? 'Hide 3D Model' : 'View 3D Model'}
-        </Button>
         
         <Collapse in={show3DViewer} timeout="auto" unmountOnExit>
           <Pokemon3DViewer pokemonId={pokemon.id} pokemonName={pokemon.name} />
