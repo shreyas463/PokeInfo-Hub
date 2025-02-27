@@ -6,6 +6,7 @@ import PokemonCard from './components/PokemonCard';
 import PokemonQuiz from './components/PokemonQuiz';
 import PokemonNews from './components/PokemonNews';
 import backgroundImage from './backgrounpoke.jpg';
+import pokeballIcon from './assets/pokeball.svg';
 import './App.css';
 
 const POKEMON_TCG_API_KEY = 'db932cee-4682-406c-8e11-3c5c32cce377';
@@ -68,23 +69,52 @@ function App() {
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
-    setShowSearchBox(false);
-    setPokemonData(null);
-    setCardData(null);
-    setError(null);
+    
+    // Hide all components first
     setShowQuiz(false);
     setShowNews(false);
+    setPokemonData(null);
+    setCardData(null);
+    setShowSearchBox(false);
     
-    // Only show the selected component
-    if (newValue === 0) {
+    // Show only the selected component
+    if (newValue === 'quiz') {
       setShowQuiz(true);
-    } else if (newValue === 1) {
+    } else if (newValue === 'news') {
       setShowNews(true);
+    } else {
+      // Default tab - show search prompt
+      setShowSearchBox(false);
     }
   };
 
   const toggleSearchBox = () => {
-    setShowSearchBox(!showSearchBox);
+    // If showing search box, just toggle it
+    if (showSearchBox) {
+      setShowSearchBox(false);
+      return;
+    }
+    
+    // If not showing search box, hide other components first
+    setShowQuiz(false);
+    setShowNews(false);
+    
+    // Then show the search box
+    setShowSearchBox(true);
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth'
+    });
   };
 
   return (
@@ -100,15 +130,17 @@ function App() {
             indicatorColor="primary"
             textColor="primary"
           >
-            <Tab label="Quiz" />
-            <Tab label="News" />
+            <Tab label="Quiz" value="quiz" />
+            <Tab label="News" value="news" />
           </Tabs>
 
+          {/* Always show search prompt */}
           <Box 
             className="search-prompt"
             onClick={toggleSearchBox}
           >
             <Typography variant="h5" className="search-prompt-text">
+              <img src={pokeballIcon} alt="Pokeball" className="search-prompt-icon" />
               Click here to search for Pokémon
             </Typography>
           </Box>
@@ -116,6 +148,7 @@ function App() {
           {showSearchBox && (
             <Paper className="search-container">
               <div className="title-container">
+                <img src={pokeballIcon} alt="Pokeball" className="pokeball-logo" />
                 <Typography variant="h5" className="app-title">PokeInfo Hub</Typography>
               </div>
               
@@ -170,19 +203,36 @@ function App() {
               <PokemonNews />
             )}
 
-            {(pokemonData || cardData) && (
+            {/* Only show search results if not showing Quiz or News */}
+            {(pokemonData || cardData) && !showQuiz && !showNews && (
               <Box className="search-results">
                 <Box className="search-results-header">
                   <Typography variant="h5" className="results-title">
                     Search Results for "{searchTerm}"
                   </Typography>
-                  <Button 
-                    variant="contained" 
-                    className="search-again-button"
-                    onClick={toggleSearchBox}
-                  >
-                    Search Again
-                  </Button>
+                  <div className="header-buttons">
+                    <Button 
+                      variant="contained" 
+                      className="search-again-button"
+                      onClick={toggleSearchBox}
+                    >
+                      Search Again
+                    </Button>
+                    <Button 
+                      variant="contained" 
+                      className="navigation-button top-button"
+                      onClick={scrollToTop}
+                    >
+                      Top ↑
+                    </Button>
+                    <Button 
+                      variant="contained" 
+                      className="navigation-button bottom-button"
+                      onClick={scrollToBottom}
+                    >
+                      Bottom ↓
+                    </Button>
+                  </div>
                 </Box>
                 
                 <Grid container spacing={3}>
@@ -212,6 +262,26 @@ function App() {
             )}
           </div>
         </Container>
+        
+        {/* Floating navigation buttons - only show when search results are visible */}
+        {(pokemonData || cardData) && !showQuiz && !showNews && (
+          <div className="floating-nav">
+            <Button 
+              variant="contained" 
+              className="floating-nav-button"
+              onClick={scrollToTop}
+            >
+              ↑ Top
+            </Button>
+            <Button 
+              variant="contained" 
+              className="floating-nav-button"
+              onClick={scrollToBottom}
+            >
+              ↓ Bottom
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
