@@ -105,35 +105,33 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 20px;
-  max-width: 900px;
-  margin: 0 auto;
+  margin-top: 20px;
 }
 
 .pokemon-card {
-  background: white !important;
-  border-radius: 15px !important;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;
-  overflow: hidden !important;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out !important;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 12px !important;
+  background-color: #f9f9f9 !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .pokemon-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2) !important;
 }
 
 .card-content {
-  padding: 0 !important;
   display: flex !important;
-  gap: 24px;
+  padding: 20px !important;
+  width: 100%;
 }
 
 .card-image-container {
-  width: 300px;
-  flex-shrink: 0;
-  padding: 16px;
-  background: linear-gradient(145deg, #f6f6f6, #ffffff);
+  flex: 0 0 auto;
+  margin-right: 20px;
+  max-width: 250px;
 }
 
 .card-image {
@@ -144,81 +142,176 @@
 }
 
 .card-details {
-  flex-grow: 1;
-  padding: 24px 24px 24px 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .card-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 .card-title {
-  font-size: 24px !important;
-  font-weight: 600 !important;
+  font-weight: bold !important;
   color: #2e3440 !important;
 }
 
 .hp-chip {
-  background-color: #4C566A !important;
-  color: white !important;
-  font-weight: 600 !important;
+  font-weight: bold !important;
+  background-color: #5e81ac !important;
 }
 
 .card-type {
-  color: #4C566A;
-  font-size: 14px !important;
-  margin-bottom: 20px !important;
+  color: #4C566A !important;
+  font-size: 0.95rem !important;
+  margin-bottom: 10px !important;
 }
 
 .attack-box {
-  background: #f8f9fb;
-  border-radius: 10px;
-  padding: 16px;
-  margin-bottom: 12px;
+  background-color: #eceff4;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
 }
 
 .attack-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
 }
 
 .attack-name {
-  font-weight: 600 !important;
+  font-weight: bold !important;
   color: #2e3440 !important;
 }
 
 .damage-chip {
-  background-color: #5E81AC !important;
+  background-color: #bf616a !important;
   color: white !important;
-  font-weight: 600 !important;
+  font-weight: bold !important;
 }
 
-.attack-cost {
-  font-size: 14px !important;
+.attack-cost, .attack-effect {
+  font-size: 0.9rem !important;
   color: #4C566A !important;
-  margin-bottom: 8px !important;
-}
-
-.attack-effect {
-  font-size: 14px !important;
-  color: #434C5E !important;
-  line-height: 1.5 !important;
 }
 
 .weakness-section {
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid #ECEFF4;
+  margin-top: 5px;
 }
 
 .weakness-text {
-  font-size: 14px !important;
+  font-size: 0.9rem !important;
   color: #4C566A !important;
+}
+
+.price-section {
+  margin-top: 20px;
+  background-color: #e5e9f0;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.price-title {
+  color: #2e3440 !important;
+  margin-bottom: 12px !important;
+  font-weight: 600 !important;
+}
+
+.price-info, .tcgplayer-info {
+  margin-bottom: 15px;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.price-label {
+  font-weight: 500 !important;
+  color: #4c566a !important;
+}
+
+.price-value {
+  font-weight: 600 !important;
+  color: #2e3440 !important;
+}
+
+.no-price-info {
+  color: #7b8a9a !important;
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+.tcgplayer-title {
+  font-weight: 600 !important;
+  color: #2e3440 !important;
+  margin: 15px 0 10px 0 !important;
+}
+
+.tcgplayer-category {
+  margin-bottom: 10px;
+}
+
+.category-name {
+  font-weight: 500 !important;
+  color: #4c566a !important;
+  margin-bottom: 5px !important;
+}
+
+.price-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-left: 15px;
+}
+
+.price-detail {
+  font-size: 0.9rem !important;
+  color: #2e3440 !important;
+}
+
+.buy-button {
+  margin-top: 10px !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+}
+
+.cardmarket-button {
+  background-color: #5e81ac !important;
+}
+
+.tcgplayer-button {
+  background-color: #b48ead !important;
+}
+
+@media (max-width: 768px) {
+  .card-content {
+    flex-direction: column;
+  }
+  
+  .card-image-container {
+    margin-right: 0;
+    margin-bottom: 20px;
+    max-width: 100%;
+  }
+  
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .price-row {
+    flex-direction: column;
+    gap: 5px;
+  }
 }
 
 @media (max-width: 600px) {
