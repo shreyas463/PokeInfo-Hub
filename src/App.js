@@ -5,6 +5,7 @@ import PokemonInfo from './components/PokemonInfo';
 import PokemonCard from './components/PokemonCard';
 import PokemonQuiz from './components/PokemonQuiz';
 import PokemonNews from './components/PokemonNews';
+import PokemonSounds from './components/PokemonSounds';
 import backgroundImage from './backgrounpoke.jpg';
 import pokeballIcon from './assets/pokeball.svg';
 import './App.css';
@@ -22,6 +23,7 @@ function App() {
   const [showSearchBox, setShowSearchBox] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
   const [showNews, setShowNews] = useState(false);
+  const [showSounds, setShowSounds] = useState(false);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -73,6 +75,7 @@ function App() {
     // Hide all components first
     setShowQuiz(false);
     setShowNews(false);
+    setShowSounds(false);
     setPokemonData(null);
     setCardData(null);
     setShowSearchBox(false);
@@ -82,6 +85,8 @@ function App() {
       setShowQuiz(true);
     } else if (newValue === 'news') {
       setShowNews(true);
+    } else if (newValue === 'sounds') {
+      setShowSounds(true);
     } else {
       // Default tab - show search prompt
       setShowSearchBox(false);
@@ -98,6 +103,7 @@ function App() {
     // If not showing search box, hide other components first
     setShowQuiz(false);
     setShowNews(false);
+    setShowSounds(false);
     
     // Then show the search box
     setShowSearchBox(true);
@@ -132,6 +138,7 @@ function App() {
           >
             <Tab label="Quiz" value="quiz" />
             <Tab label="News" value="news" />
+            <Tab label="Sounds" value="sounds" />
           </Tabs>
 
           {/* Always show search prompt */}
@@ -202,9 +209,13 @@ function App() {
             {showNews && (
               <PokemonNews />
             )}
+            
+            {showSounds && (
+              <PokemonSounds />
+            )}
 
             {/* Only show search results if not showing Quiz or News */}
-            {(pokemonData || cardData) && !showQuiz && !showNews && (
+            {(pokemonData || cardData) && !showQuiz && !showNews && !showSounds && (
               <Box className="search-results">
                 <Box className="search-results-header">
                   <Typography variant="h5" className="results-title">
@@ -264,7 +275,7 @@ function App() {
         </Container>
         
         {/* Floating navigation buttons - only show when search results are visible */}
-        {(pokemonData || cardData) && !showQuiz && !showNews && (
+        {(pokemonData || cardData) && !showQuiz && !showNews && !showSounds && (
           <div className="floating-nav">
             <Button 
               variant="contained" 
