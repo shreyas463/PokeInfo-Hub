@@ -21,7 +21,7 @@ const quizQuestions = [
   {
     question: "Which Pokémon is known as the 'Flame Pokémon'?",
     options: ["Charizard", "Flareon", "Moltres", "Charmander"],
-    correctAnswer: "Charizard"
+    correctAnswer: "Charizard, Flareon, Moltres, Charmander"
   },
   {
     question: "Which of these Pokémon types was introduced in Generation II?",
