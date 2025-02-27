@@ -28,7 +28,6 @@ function App() {
 
     try {
       if (displayOption === 'both' || displayOption === 'pokemon') {
-        // Fetch Pokemon data from PokeAPI
         const pokemonResponse = await axios.get(
           `https://pokeapi.co/api/v2/pokemon/${searchTerm.toLowerCase()}`
         );
@@ -36,16 +35,20 @@ function App() {
       }
 
       if (displayOption === 'both' || displayOption === 'card') {
-        // Fetch card data from Pokemon TCG API
         const cardResponse = await axios.get(
-          `https://api.pokemontcg.io/v2/cards?q=name:${searchTerm}`,
+          `https://api.pokemontcg.io/v2/cards?q=name:${searchTerm}*&orderBy=name`,
           {
             headers: {
               'X-Api-Key': POKEMON_TCG_API_KEY
             }
           }
         );
-        setCardData(cardResponse.data.data[0]);
+        
+        if (cardResponse.data.data && cardResponse.data.data.length > 0) {
+          setCardData(cardResponse.data.data);
+        } else {
+          setError('No trading cards found for this Pokemon.');
+        }
       }
     } catch (err) {
       setError('Pokemon not found. Please try another search.');
@@ -95,23 +98,24 @@ function App() {
           </form>
           {error && <p className="error-message">{error}</p>}
         </div>
-
-        {(pokemonData || cardData) && (
-          <Container maxWidth="lg" sx={{ mt: 4, bgcolor: 'rgba(255, 255, 255, 0.9)', borderRadius: 2, p: 3 }}>
-            <Grid container spacing={3}>
-              {pokemonData && displayOption !== 'card' && (
-                <Grid item xs={12} md={6}>
-                  <PokemonInfo pokemon={pokemonData} />
-                </Grid>
-              )}
-              {cardData && displayOption !== 'pokemon' && (
-                <Grid item xs={12} md={6}>
-                  <PokemonCard card={cardData} />
-                </Grid>
-              )}
-            </Grid>
-          </Container>
-        )}
+        <div className="results-container">
+          {(pokemonData || cardData) && (
+            <Container maxWidth="lg">
+              <Grid container spacing={3}>
+                {pokemonData && displayOption !== 'card' && (
+                  <Grid item xs={12} md={cardData ? 6 : 12}>
+                    <PokemonInfo pokemon={pokemonData} />
+                  </Grid>
+                )}
+                {cardData && displayOption !== 'pokemon' && (
+                  <Grid item xs={12} md={pokemonData ? 6 : 12}>
+                    <PokemonCard cards={cardData} />
+                  </Grid>
+                )}
+              </Grid>
+            </Container>
+          )}
+        </div>
       </div>
     </div>
   );
