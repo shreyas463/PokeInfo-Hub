@@ -5,6 +5,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ThreeDRotationIcon from '@mui/icons-material/ThreeDRotation';
 import Pokemon3DViewer from './Pokemon3DViewer';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import { playPokemonCry, playUISound } from '../utils/soundUtils';
 
 function PokemonCard({ card }) {
   const [expanded, setExpanded] = useState(false);
@@ -60,12 +62,27 @@ function PokemonCard({ card }) {
           />
         </div>
         <div className="card-details">
-          <div className="card-header">
+          <Box className="card-header">
             <Typography variant="h5" component="h2" className="card-title">
               {card.name}
             </Typography>
+            <Box>
+              <IconButton 
+                color="primary" 
+                onClick={() => {
+                  // Extract Pokemon ID from card.id (format: "swsh1-1")
+                  const pokemonId = parseInt(card.nationalPokedexNumbers?.[0] || card.id.split('-')[1]);
+                  playPokemonCry(pokemonId);
+                  playUISound('click');
+                }}
+                className="sound-button"
+                title="Play Pokémon cry"
+              >
+                <VolumeUpIcon />
+              </IconButton>
+            </Box>
             <Chip label={`HP: ${card.hp || 'N/A'}`} color="primary" className="hp-chip" />
-          </div>
+          </Box>
 
           <Typography className="card-type">
             Type: {card.types ? card.types.join(', ') : 'Colorless'}
