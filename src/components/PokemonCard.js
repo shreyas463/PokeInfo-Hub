@@ -1,9 +1,20 @@
-import React from 'react';
-import { Card, CardContent, Typography, Box, Chip, Button } from '@mui/material';
+import React, { useState } from 'react';
+import { Card, CardContent, Typography, Box, Chip, Button, Collapse, IconButton } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 function PokemonCard({ cards }) {
+  const [expandedCards, setExpandedCards] = useState({});
+  
   if (!cards || cards.length === 0) return null;
+  
+  const toggleCardExpand = (index) => {
+    setExpandedCards(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }));
+  };
 
   const getPriceInfo = (card) => {
     if (!card.cardmarket || !card.cardmarket.prices) {
@@ -36,6 +47,7 @@ function PokemonCard({ cards }) {
       {cards.map((card, index) => {
         const priceInfo = getPriceInfo(card);
         const tcgPlayerInfo = getTCGPlayerInfo(card);
+        const isExpanded = expandedCards[index] || false;
         
         return (
           <Card key={index} className="pokemon-card">
@@ -50,7 +62,7 @@ function PokemonCard({ cards }) {
               <div className="card-details">
                 <div className="card-header">
                   <Typography variant="h5" component="h2" className="card-title">
-                    {card.name} {card.supertype && `(${card.supertype})`}
+                    {card.name}
                   </Typography>
                   <Chip label={`HP: ${card.hp || 'N/A'}`} color="primary" className="hp-chip" />
                 </div>
@@ -59,49 +71,67 @@ function PokemonCard({ cards }) {
                   Type: {card.types ? card.types.join(', ') : 'Colorless'}
                 </Typography>
 
-                {card.abilities && card.abilities.map((ability, i) => (
-                  <Box key={i} sx={{ mb: 2 }}>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
-                      Ability: {ability.name}
+                <div className="card-actions">
+                  <IconButton 
+                    onClick={() => toggleCardExpand(index)}
+                    aria-expanded={isExpanded}
+                    aria-label="show more"
+                    className="expand-button"
+                  >
+                    {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                    <Typography variant="button" className="expand-text">
+                      {isExpanded ? 'Show Less' : 'Show Details'}
                     </Typography>
-                    <Typography variant="body2">
-                      {ability.text}
-                    </Typography>
-                  </Box>
-                ))}
+                  </IconButton>
+                </div>
 
-                {card.attacks && card.attacks.map((attack, i) => (
-                  <Box key={i} className="attack-box">
-                    <div className="attack-header">
-                      <Typography variant="subtitle1" className="attack-name">
-                        Attack: {attack.name} {attack.damage && `- ${attack.damage}`}
-                      </Typography>
-                      {attack.damage && (
-                        <Chip 
-                          label={attack.damage} 
-                          size="small" 
-                          className="damage-chip"
-                        />
-                      )}
-                    </div>
-                    <Typography className="attack-cost">
-                      Cost: {attack.cost ? attack.cost.join(', ') : 'None'}
-                    </Typography>
-                    {attack.text && (
-                      <Typography className="attack-effect">
-                        Effect: {attack.text}
-                      </Typography>
+                <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+                  <div className="card-expanded-content">
+                    {card.abilities && card.abilities.map((ability, i) => (
+                      <Box key={i} sx={{ mb: 2 }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
+                          Ability: {ability.name}
+                        </Typography>
+                        <Typography variant="body2">
+                          {ability.text}
+                        </Typography>
+                      </Box>
+                    ))}
+
+                    {card.attacks && card.attacks.map((attack, i) => (
+                      <Box key={i} className="attack-box">
+                        <div className="attack-header">
+                          <Typography variant="subtitle1" className="attack-name">
+                            Attack: {attack.name}
+                          </Typography>
+                          {attack.damage && (
+                            <Chip 
+                              label={attack.damage} 
+                              size="small" 
+                              className="damage-chip"
+                            />
+                          )}
+                        </div>
+                        <Typography className="attack-cost">
+                          Cost: {attack.cost ? attack.cost.join(', ') : 'None'}
+                        </Typography>
+                        {attack.text && (
+                          <Typography className="attack-effect">
+                            Effect: {attack.text}
+                          </Typography>
+                        )}
+                      </Box>
+                    ))}
+
+                    {card.weaknesses && (
+                      <div className="weakness-section">
+                        <Typography className="weakness-text">
+                          Weaknesses: {card.weaknesses.map(w => `${w.type} (${w.value})`).join(', ')}
+                        </Typography>
+                      </div>
                     )}
-                  </Box>
-                ))}
-
-                {card.weaknesses && (
-                  <div className="weakness-section">
-                    <Typography className="weakness-text">
-                      Weaknesses: {card.weaknesses.map(w => `${w.type} (${w.value})`).join(', ')}
-                    </Typography>
                   </div>
-                )}
+                </Collapse>
                 
                 <div className="price-section">
                   <Typography variant="h6" className="price-title">
@@ -118,10 +148,6 @@ function PokemonCard({ cards }) {
                         <Typography className="price-label">Lowest Price:</Typography>
                         <Typography className="price-value">€{priceInfo.lowPrice?.toFixed(2) || 'N/A'}</Typography>
                       </div>
-                      <div className="price-row">
-                        <Typography className="price-label">Trend Price:</Typography>
-                        <Typography className="price-value">€{priceInfo.trendPrice?.toFixed(2) || 'N/A'}</Typography>
-                      </div>
                       <Button 
                         variant="contained" 
                         color="primary" 
@@ -130,6 +156,7 @@ function PokemonCard({ cards }) {
                         href={priceInfo.url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        size="small"
                       >
                         Buy on CardMarket
                       </Button>
@@ -145,35 +172,27 @@ function PokemonCard({ cards }) {
                       <Typography variant="subtitle1" className="tcgplayer-title">
                         TCGPlayer Prices:
                       </Typography>
-                      {Object.entries(tcgPlayerInfo.prices).map(([category, data]) => (
-                        <div key={category} className="tcgplayer-category">
-                          <Typography className="category-name">
-                            {category.charAt(0).toUpperCase() + category.slice(1)}:
-                          </Typography>
-                          <div className="price-details">
-                            {data.low && (
-                              <Typography className="price-detail">
-                                Low: ${data.low.toFixed(2)}
-                              </Typography>
-                            )}
-                            {data.mid && (
-                              <Typography className="price-detail">
-                                Mid: ${data.mid.toFixed(2)}
-                              </Typography>
-                            )}
-                            {data.high && (
-                              <Typography className="price-detail">
-                                High: ${data.high.toFixed(2)}
-                              </Typography>
-                            )}
-                            {data.market && (
-                              <Typography className="price-detail">
-                                Market: ${data.market.toFixed(2)}
-                              </Typography>
-                            )}
+                      <div className="tcgplayer-price-summary">
+                        {Object.entries(tcgPlayerInfo.prices).slice(0, 1).map(([category, data]) => (
+                          <div key={category} className="tcgplayer-category">
+                            <Typography className="category-name">
+                              {category.charAt(0).toUpperCase() + category.slice(1)}:
+                            </Typography>
+                            <div className="price-details">
+                              {data.low && (
+                                <Typography className="price-detail">
+                                  Low: ${data.low.toFixed(2)}
+                                </Typography>
+                              )}
+                              {data.market && (
+                                <Typography className="price-detail">
+                                  Market: ${data.market.toFixed(2)}
+                                </Typography>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                       <Button 
                         variant="contained" 
                         color="secondary" 
@@ -182,6 +201,7 @@ function PokemonCard({ cards }) {
                         href={tcgPlayerInfo.url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        size="small"
                       >
                         Buy on TCGPlayer
                       </Button>
