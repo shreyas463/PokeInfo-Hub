@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Container, TextField, Button, FormControl, Select, MenuItem, Paper, Typography } from '@mui/material';
+import { Container, TextField, Button, FormControl, Select, MenuItem, Paper, Typography, Tabs, Tab, Box } from '@mui/material';
 import PokemonInfo from './components/PokemonInfo';
 import PokemonCard from './components/PokemonCard';
+import PokemonQuiz from './components/PokemonQuiz';
+import PokemonNews from './components/PokemonNews';
 import backgroundImage from './backgrounpoke.jpg';
 import pokeball from './pokeball.jpeg';
 import './App.css';
@@ -16,6 +18,7 @@ function App() {
   const [displayOption, setDisplayOption] = useState('both');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState(0);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -51,92 +54,108 @@ function App() {
         }
       }
     } catch (err) {
-      setError('Pokemon not found. Please try another search.');
+      console.error('Error fetching data:', err);
+      setError('Pokemon not found. Please check the spelling and try again.');
     } finally {
       setLoading(false);
     }
   };
 
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+  };
+
   return (
     <div className="App">
-      <img src={backgroundImage} alt="Pokemon Background" className="background-image" />
+      <img src={backgroundImage} alt="Background" className="background-image" />
       <div className="content-wrapper">
-        <div className="search-container">
-          <div className="title-container">
-            <img src={pokeball} alt="Pokeball" className="pokeball-logo" />
-            <h1>Pokemon Info Hub</h1>
-          </div>
-          <form onSubmit={handleSearch} className="search-form">
-            <TextField
-              className="search-box"
-              variant="outlined"
-              placeholder="Search for Pokemon and their Trading Cards"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              fullWidth
-              size="small"
-            />
-            <FormControl fullWidth size="small" className="display-select">
-              <Select
-                value={displayOption}
-                onChange={(e) => setDisplayOption(e.target.value)}
-                displayEmpty
-              >
-                <MenuItem value="both">Show Both</MenuItem>
-                <MenuItem value="pokemon">Pokemon Info Only</MenuItem>
-                <MenuItem value="card">Trading Card Only</MenuItem>
-              </Select>
-            </FormControl>
-            <Button
-              className="search-button"
-              type="submit"
-              variant="contained"
-              disabled={loading}
-            >
-              {loading ? 'Searching...' : 'Search'}
-            </Button>
-          </form>
-          {error && <p className="error-message">{error}</p>}
-        </div>
-        <div className="results-container">
-          {(pokemonData || cardData) && (
-            <Container maxWidth="xl" className="results-content">
-              {displayOption === 'both' && (
-                <Typography variant="h4" component="h2" className="results-title">
-                  Results for "{searchTerm}"
-                </Typography>
-              )}
+        <Container>
+          <Tabs 
+            value={activeTab} 
+            onChange={handleTabChange} 
+            className="navigation-tabs"
+            variant="fullWidth"
+            indicatorColor="primary"
+            textColor="primary"
+          >
+            <Tab label="Search" />
+            <Tab label="Quiz" />
+            <Tab label="News" />
+          </Tabs>
+
+          {activeTab === 0 && (
+            <Box className="search-tab-content">
+              <Paper className="search-container">
+                <div className="title-container">
+                  <img src={pokeball} alt="Pokeball" className="pokeball-logo" />
+                  <Typography variant="h5" className="app-title">PokeInfo Hub</Typography>
+                </div>
+                
+                <form onSubmit={handleSearch} className="search-form">
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    label="Enter Pokemon Name"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="search-input"
+                    size="small"
+                  />
+                  
+                  <FormControl fullWidth variant="outlined" size="small" className="display-option">
+                    <Select
+                      value={displayOption}
+                      onChange={(e) => setDisplayOption(e.target.value)}
+                    >
+                      <MenuItem value="both">Show Both</MenuItem>
+                      <MenuItem value="pokemon">Pokemon Info Only</MenuItem>
+                      <MenuItem value="card">Trading Cards Only</MenuItem>
+                    </Select>
+                  </FormControl>
+                  
+                  <Button 
+                    type="submit" 
+                    variant="contained" 
+                    color="primary" 
+                    fullWidth
+                    className="search-button"
+                    disabled={loading}
+                  >
+                    {loading ? 'Searching...' : 'Search'}
+                  </Button>
+                </form>
+              </Paper>
               
-              <div className="results-layout">
-                {pokemonData && displayOption !== 'card' && (
-                  <div className="info-column">
-                    {displayOption === 'both' && (
-                      <Paper elevation={0} className="section-header">
-                        <Typography variant="h5" component="h3">
-                          Pokemon Information
-                        </Typography>
-                      </Paper>
-                    )}
-                    <PokemonInfo pokemon={pokemonData} />
-                  </div>
+              <div className="results-container">
+                {error && (
+                  <Paper className="error-container">
+                    <Typography color="error">{error}</Typography>
+                  </Paper>
                 )}
                 
-                {cardData && displayOption !== 'pokemon' && (
-                  <div className="cards-column">
-                    {displayOption === 'both' && (
-                      <Paper elevation={0} className="section-header">
-                        <Typography variant="h5" component="h3">
-                          Trading Cards
-                        </Typography>
-                      </Paper>
-                    )}
-                    <PokemonCard cards={cardData} />
-                  </div>
+                {pokemonData && (displayOption === 'both' || displayOption === 'pokemon') && (
+                  <PokemonInfo pokemon={pokemonData} />
+                )}
+                
+                {cardData && (displayOption === 'both' || displayOption === 'card') && (
+                  <PokemonCard cards={cardData} />
                 )}
               </div>
-            </Container>
+            </Box>
           )}
-        </div>
+
+          {activeTab === 1 && (
+            <Box className="quiz-tab-content">
+              <PokemonQuiz />
+            </Box>
+          )}
+
+          {activeTab === 2 && (
+            <Box className="news-tab-content">
+              <PokemonNews />
+            </Box>
+          )}
+        </Container>
       </div>
     </div>
   );
