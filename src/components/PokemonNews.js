@@ -9,10 +9,8 @@ import {
   Link, 
   CircularProgress, 
   Chip,
-  Divider,
   Button
 } from '@mui/material';
-import axios from 'axios';
 
 // Sample news data (in a real app, this would come from an API)
 const sampleNewsData = [
