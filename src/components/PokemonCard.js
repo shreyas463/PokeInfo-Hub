@@ -3,14 +3,24 @@ import { Card, CardContent, Typography, Box, Chip, Button, Collapse, IconButton 
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ThreeDRotationIcon from '@mui/icons-material/ThreeDRotation';
+import Pokemon3DViewer from './Pokemon3DViewer';
 
 function PokemonCard({ cards }) {
   const [expandedCards, setExpandedCards] = useState({});
+  const [show3DModel, setShow3DModel] = useState({});
   
   if (!cards || cards.length === 0) return null;
   
   const toggleCardExpand = (index) => {
     setExpandedCards(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }));
+  };
+
+  const toggle3DModel = (index) => {
+    setShow3DModel(prev => ({
       ...prev,
       [index]: !prev[index]
     }));
@@ -48,6 +58,7 @@ function PokemonCard({ cards }) {
         const priceInfo = getPriceInfo(card);
         const tcgPlayerInfo = getTCGPlayerInfo(card);
         const isExpanded = expandedCards[index] || false;
+        const is3DModelVisible = show3DModel[index] || false;
         
         return (
           <Card key={index} className="pokemon-card">
@@ -81,6 +92,16 @@ function PokemonCard({ cards }) {
                     {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     <Typography variant="button" className="expand-text">
                       {isExpanded ? 'Show Less' : 'Show Details'}
+                    </Typography>
+                  </IconButton>
+                  <IconButton 
+                    onClick={() => toggle3DModel(index)}
+                    aria-label="toggle 3D model"
+                    className="toggle-3d-button"
+                  >
+                    <ThreeDRotationIcon />
+                    <Typography variant="button" className="toggle-3d-text">
+                      {is3DModelVisible ? 'Hide 3D Model' : 'Show 3D Model'}
                     </Typography>
                   </IconButton>
                 </div>
@@ -131,6 +152,10 @@ function PokemonCard({ cards }) {
                       </div>
                     )}
                   </div>
+                </Collapse>
+                
+                <Collapse in={is3DModelVisible} timeout="auto" unmountOnExit>
+                  <Pokemon3DViewer card={card} />
                 </Collapse>
                 
                 <div className="price-section">

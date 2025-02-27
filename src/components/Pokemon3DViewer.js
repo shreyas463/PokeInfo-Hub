@@ -97,10 +97,31 @@ function ModelLoader() {
 }
 
 // Main 3D Viewer component
-function Pokemon3DViewer({ pokemonId, pokemonName }) {
+function Pokemon3DViewer({ pokemonId, pokemonName, card }) {
   const [modelScale, setModelScale] = useState(1.5);
   const [isLoading, setIsLoading] = useState(false);
   const [cameraPosition, setCameraPosition] = useState([0, 0, 5]);
+  
+  // If card is provided, extract pokemonId from it
+  useEffect(() => {
+    if (card) {
+      // Extract the Pokemon ID from the card data
+      // This depends on how the ID is stored in your card data
+      // For example, if it's in the format "sm1-1" or similar
+      const idMatch = card.id?.match(/\d+$/);
+      if (idMatch) {
+        pokemonId = idMatch[0];
+      } else if (card.nationalPokedexNumbers && card.nationalPokedexNumbers.length > 0) {
+        // If the card has a Pokedex number, use that
+        pokemonId = card.nationalPokedexNumbers[0];
+      }
+      
+      // If we have a name but no ID, we can still show the component
+      if (!pokemonId && card.name) {
+        pokemonName = card.name;
+      }
+    }
+  }, [card]);
   
   // Reset camera position
   const controlsRef = useRef();
@@ -117,10 +138,21 @@ function Pokemon3DViewer({ pokemonId, pokemonName }) {
   const zoomIn = () => setModelScale(prev => Math.min(prev + 0.5, 5));
   const zoomOut = () => setModelScale(prev => Math.max(prev - 0.5, 0.5));
 
+  // If we don't have a pokemonId or pokemonName, show a message
+  if (!pokemonId && !pokemonName && !card) {
+    return (
+      <Box className="model-viewer-container">
+        <Typography variant="body1" color="text.secondary">
+          No Pokemon data available for 3D model.
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box className="model-viewer-container">
       <Typography variant="h6" className="model-viewer-title">
-        3D Model Viewer - {pokemonName}
+        3D Model Viewer - {pokemonName || card?.name || 'Pokemon'}
       </Typography>
       
       <Box className="canvas-container">
