@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Container, Grid, TextField, Button, FormControl, Select, MenuItem } from '@mui/material';
+import { Container, TextField, Button, FormControl, Select, MenuItem, Paper, Typography } from '@mui/material';
 import PokemonInfo from './components/PokemonInfo';
 import PokemonCard from './components/PokemonCard';
 import backgroundImage from './backgrounpoke.jpg';
@@ -100,19 +100,40 @@ function App() {
         </div>
         <div className="results-container">
           {(pokemonData || cardData) && (
-            <Container maxWidth="lg">
-              <Grid container spacing={3}>
+            <Container maxWidth="xl" className="results-content">
+              {displayOption === 'both' && (
+                <Typography variant="h4" component="h2" className="results-title">
+                  Results for "{searchTerm}"
+                </Typography>
+              )}
+              
+              <div className="results-layout">
                 {pokemonData && displayOption !== 'card' && (
-                  <Grid item xs={12} md={cardData ? 6 : 12}>
+                  <div className="info-column">
+                    {displayOption === 'both' && (
+                      <Paper elevation={0} className="section-header">
+                        <Typography variant="h5" component="h3">
+                          Pokemon Information
+                        </Typography>
+                      </Paper>
+                    )}
                     <PokemonInfo pokemon={pokemonData} />
-                  </Grid>
+                  </div>
                 )}
+                
                 {cardData && displayOption !== 'pokemon' && (
-                  <Grid item xs={12} md={pokemonData ? 6 : 12}>
+                  <div className="cards-column">
+                    {displayOption === 'both' && (
+                      <Paper elevation={0} className="section-header">
+                        <Typography variant="h5" component="h3">
+                          Trading Cards
+                        </Typography>
+                      </Paper>
+                    )}
                     <PokemonCard cards={cardData} />
-                  </Grid>
+                  </div>
                 )}
-              </Grid>
+              </div>
             </Container>
           )}
         </div>
