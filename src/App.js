@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Container, TextField, Button, FormControl, Select, MenuItem, Paper, Typography, Tabs, Tab, Box } from '@mui/material';
+import { Container, TextField, Button, FormControl, Select, MenuItem, Paper, Typography, Tabs, Tab, Box, Grid } from '@mui/material';
 import PokemonInfo from './components/PokemonInfo';
 import PokemonCard from './components/PokemonCard';
 import PokemonQuiz from './components/PokemonQuiz';
 import PokemonNews from './components/PokemonNews';
 import backgroundImage from './backgrounpoke.jpg';
-import pokeball from './pokeball.jpeg';
 import './App.css';
 
 const POKEMON_TCG_API_KEY = 'db932cee-4682-406c-8e11-3c5c32cce377';
@@ -18,8 +17,10 @@ function App() {
   const [displayOption, setDisplayOption] = useState('both');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(null);
   const [showSearchBox, setShowSearchBox] = useState(false);
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [showNews, setShowNews] = useState(false);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -40,7 +41,7 @@ function App() {
 
       if (displayOption === 'both' || displayOption === 'card') {
         const cardResponse = await axios.get(
-          `https://api.pokemontcg.io/v2/cards?q=name:${searchTerm}*&orderBy=name`,
+          `https://api.pokemontcg.io/v2/cards?q=name:${searchTerm}`,
           {
             headers: {
               'X-Api-Key': POKEMON_TCG_API_KEY
@@ -54,6 +55,9 @@ function App() {
           setError('No trading cards found for this Pokemon.');
         }
       }
+      
+      setShowSearchBox(false);
+      
     } catch (err) {
       console.error('Error fetching data:', err);
       setError('Pokemon not found. Please check the spelling and try again.');
@@ -68,6 +72,15 @@ function App() {
     setPokemonData(null);
     setCardData(null);
     setError(null);
+    setShowQuiz(false);
+    setShowNews(false);
+    
+    // Only show the selected component
+    if (newValue === 0) {
+      setShowQuiz(true);
+    } else if (newValue === 1) {
+      setShowNews(true);
+    }
   };
 
   const toggleSearchBox = () => {
@@ -103,7 +116,6 @@ function App() {
           {showSearchBox && (
             <Paper className="search-container">
               <div className="title-container">
-                <img src={pokeball} alt="Pokeball" className="pokeball-logo" />
                 <Typography variant="h5" className="app-title">PokeInfo Hub</Typography>
               </div>
               
@@ -150,28 +162,53 @@ function App() {
               </Paper>
             )}
 
-            {activeTab === 0 ? (
+            {showQuiz && (
               <PokemonQuiz />
-            ) : activeTab === 1 ? (
-              <PokemonNews />
-            ) : null}
-
-            {pokemonData && displayOption !== 'card' && (
-              <PokemonInfo pokemon={pokemonData} />
             )}
             
-            {cardData && displayOption !== 'pokemon' && (
-              <div className="cards-container">
-                <Typography variant="h5" className="results-title">
-                  {cardData.data && cardData.data.length > 0 
-                    ? `Found ${cardData.count} Trading Cards` 
-                    : 'No Trading Cards Found'}
-                </Typography>
+            {showNews && (
+              <PokemonNews />
+            )}
+
+            {(pokemonData || cardData) && (
+              <Box className="search-results">
+                <Box className="search-results-header">
+                  <Typography variant="h5" className="results-title">
+                    Search Results for "{searchTerm}"
+                  </Typography>
+                  <Button 
+                    variant="contained" 
+                    className="search-again-button"
+                    onClick={toggleSearchBox}
+                  >
+                    Search Again
+                  </Button>
+                </Box>
                 
-                {cardData.data && cardData.data.map((card) => (
-                  <PokemonCard key={card.id} card={card} />
-                ))}
-              </div>
+                <Grid container spacing={3}>
+                  {pokemonData && displayOption !== 'card' && (
+                    <Grid item xs={12} md={cardData && displayOption !== 'pokemon' ? 6 : 12}>
+                      <PokemonInfo pokemon={pokemonData} />
+                    </Grid>
+                  )}
+                  
+                  {cardData && displayOption !== 'pokemon' && (
+                    <Grid item xs={12} md={pokemonData && displayOption !== 'card' ? 6 : 12}>
+                      <div className="cards-container">
+                        <Typography variant="h6" className="cards-title">
+                          {cardData.data && cardData.data.length > 0 
+                            ? `Found ${cardData.count} Trading Cards` 
+                            : 'No Trading Cards Found'}
+                        </Typography>
+                        
+                        {cardData.data && cardData.data.map((card, index) => (
+                          <PokemonCard key={index} card={card} />
+                        ))}
+                      </div>
+                    </Grid>
+                  )}
+                </Grid>
+              </Box>
             )}
           </div>
         </Container>
