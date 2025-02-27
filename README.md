@@ -2,6 +2,10 @@
 
 A modern web application that serves as your comprehensive Pokémon information center. This interactive platform allows users to search and explore Pokémon cards, view detailed information about different Pokémon, discover their characteristics and abilities, enjoy interactive quizzes, stay updated with Pokémon news, and experience Pokémon sounds.
 
+<img width="1512" alt="Screenshot 2025-02-27 at 2 39 32 AM" src="https://github.com/user-attachments/assets/73bcddfa-2fc1-4849-a224-d5254affbb3f" />
+
+
+
 ## Features
 
 ### Pokémon Search
