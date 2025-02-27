@@ -1182,3 +1182,94 @@ body {
   transform: scale(1.1) !important;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5) !important;
 }
+
+/* Pokemon Sounds Library Styles */
+.sounds-container {
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(30, 33, 58, 0.95), rgba(46, 52, 78, 0.95));
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(94, 129, 172, 0.1);
+  border: 1px solid rgba(94, 129, 172, 0.3);
+  margin-bottom: 30px;
+}
+
+.sounds-tabs-container {
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, rgba(26, 27, 38, 0.95), rgba(46, 52, 78, 0.95));
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.sound-card {
+  background: linear-gradient(135deg, rgba(46, 52, 78, 0.95), rgba(30, 33, 58, 0.95));
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(94, 129, 172, 0.3);
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.sound-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at top right, rgba(94, 129, 172, 0.2) 0%, transparent 70%);
+  opacity: 0.5;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.sound-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+.pokemon-sound-image {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  transition: all 0.3s ease;
+}
+
+.sound-card:hover .pokemon-sound-image {
+  transform: scale(1.1);
+}
+
+.pokemon-name {
+  color: #eceff4;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.play-sound-button {
+  background-color: rgba(94, 129, 172, 0.2) !important;
+  transition: all 0.3s ease !important;
+}
+
+.play-sound-button:hover {
+  background-color: rgba(94, 129, 172, 0.4) !important;
+  transform: scale(1.1);
+}
+
+.favorite-button {
+  transition: all 0.3s ease !important;
+}
+
+.favorite-button:hover {
+  transform: scale(1.2);
+}
+
+.sound-button {
+  background-color: rgba(94, 129, 172, 0.2) !important;
+  margin-right: 10px !important;
+  transition: all 0.3s ease !important;
+}
+
+.sound-button:hover {
+  background-color: rgba(94, 129, 172, 0.4) !important;
+  transform: scale(1.1);
+}
