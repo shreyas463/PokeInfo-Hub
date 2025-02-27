@@ -1,9 +1,134 @@
 /* Navigation Tabs */
 .navigation-tabs {
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(30, 33, 58, 0.9);
   border-radius: 8px 8px 0 0;
   margin-bottom: 20px;
   backdrop-filter: blur(10px);
+}
+
+.navigation-tabs .MuiTab-root {
+  color: #f0f0f0;
+  font-weight: 500;
+}
+
+.navigation-tabs .Mui-selected {
+  color: #5e81ac;
+  font-weight: 600;
+}
+
+/* Search Prompt */
+.search-prompt {
+  background-color: rgba(30, 33, 58, 0.85);
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  margin: 20px auto;
+  max-width: 600px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(94, 129, 172, 0.3);
+}
+
+.search-prompt:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  background-color: rgba(30, 33, 58, 0.95);
+}
+
+.search-prompt-text {
+  color: #f0f0f0;
+  font-weight: 500;
+}
+
+/* Search Container */
+.search-container {
+  position: sticky;
+  top: 20px;
+  z-index: 10;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  background: rgba(30, 33, 58, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(94, 129, 172, 0.3);
+  color: #f0f0f0;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.app-title {
+  color: #f0f0f0;
+  margin: 0;
+}
+
+.search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.search-input .MuiOutlinedInput-root {
+  background-color: rgba(240, 240, 240, 0.1);
+  border-radius: 8px;
+}
+
+.search-input .MuiInputLabel-root {
+  color: #f0f0f0;
+}
+
+.search-input .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(94, 129, 172, 0.5);
+}
+
+.display-option .MuiOutlinedInput-root {
+  background-color: rgba(240, 240, 240, 0.1);
+  border-radius: 8px;
+}
+
+.display-option .MuiSelect-select {
+  color: #f0f0f0;
+}
+
+.display-option .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(94, 129, 172, 0.5);
+}
+
+.search-button {
+  background-color: #5e81ac !important;
+  color: #f0f0f0 !important;
+  border-radius: 8px !important;
+  padding: 10px 0 !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+}
+
+.search-button:hover {
+  background-color: #81a1c1 !important;
+  box-shadow: 0 4px 12px rgba(94, 129, 172, 0.5) !important;
+}
+
+/* Results Container */
+.results-container {
+  margin-top: 20px;
+}
+
+.error-container {
+  background-color: rgba(30, 33, 58, 0.85);
+  color: #f0f0f0;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border-left: 4px solid #bf616a;
 }
 
 /* Quiz Styles */
@@ -11,7 +136,7 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(30, 33, 58, 0.9);
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
@@ -20,7 +145,7 @@
 .quiz-title {
   text-align: center;
   margin-bottom: 24px;
-  color: #3f51b5;
+  color: #5e81ac;
 }
 
 .question-card {
@@ -77,7 +202,7 @@
 
 .score-title {
   margin-bottom: 16px;
-  color: #3f51b5;
+  color: #5e81ac;
 }
 
 .final-score {
@@ -102,7 +227,7 @@
 /* News Styles */
 .news-container {
   padding: 20px;
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(30, 33, 58, 0.9);
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
@@ -111,14 +236,14 @@
 .news-title {
   text-align: center;
   margin-bottom: 24px;
-  color: #3f51b5;
+  color: #5e81ac;
 }
 
 .category-filter {
   display: flex;
   flex-direction: column;
   margin-bottom: 24px;
-  background-color: #f5f5f5;
+  background-color: #3b4252;
   padding: 12px;
   border-radius: 8px;
 }
@@ -230,85 +355,6 @@
   padding: 20px;
 }
 
-.search-container {
-  position: sticky;
-  top: 20px;
-  z-index: 10;
-  width: 300px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-}
-
-.title-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.pokeball-logo {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.app-title {
-  color: #333;
-  font-size: 1.5rem;
-  margin: 0;
-  font-weight: 700;
-}
-
-.search-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.search-box {
-  background: white !important;
-}
-
-.search-box .MuiOutlinedInput-root {
-  border-radius: 8px;
-}
-
-.display-select {
-  background: white !important;
-  border-radius: 8px;
-}
-
-.display-select .MuiOutlinedInput-root {
-  border-radius: 8px;
-}
-
-.search-button {
-  background: #ff3d3d !important;
-  color: white !important;
-  border-radius: 8px !important;
-  padding: 8px 16px !important;
-  font-weight: 600 !important;
-  text-transform: none !important;
-  transition: all 0.3s ease !important;
-}
-
-.search-button:hover {
-  background: #ff2424 !important;
-  box-shadow: 0 4px 8px rgba(255, 61, 61, 0.3) !important;
-}
-
-.error-message {
-  color: #ff3d3d;
-  margin-top: 10px;
-  text-align: center;
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
 .cards-container {
   display: flex;
   flex-direction: column;
@@ -363,7 +409,7 @@
 
 .card-title {
   font-weight: 700 !important;
-  color: #2e3440 !important;
+  color: #5e81ac !important;
 }
 
 .card-type {
@@ -416,7 +462,7 @@
   margin: 15px 0;
   border-radius: 8px;
   overflow: hidden;
-  background-color: #f5f5f5;
+  background-color: #3b4252;
 }
 
 .pokemon-card .canvas-container {
@@ -432,7 +478,7 @@
   justify-content: center;
   gap: 10px;
   padding: 10px;
-  background-color: #f5f5f5;
+  background-color: #3b4252;
 }
 
 .attack-box {
@@ -455,7 +501,7 @@
 
 .attack-name {
   font-weight: 600 !important;
-  color: #2e3440 !important;
+  color: #5e81ac !important;
 }
 
 .damage-chip {
@@ -487,7 +533,7 @@
 }
 
 .price-title {
-  color: #2e3440 !important;
+  color: #5e81ac !important;
   margin-bottom: 12px !important;
   font-weight: 600 !important;
 }
@@ -509,7 +555,7 @@
 
 .price-value {
   font-weight: 600 !important;
-  color: #2e3440 !important;
+  color: #5e81ac !important;
 }
 
 .no-price-info {
@@ -520,7 +566,7 @@
 
 .tcgplayer-title {
   font-weight: 600 !important;
-  color: #2e3440 !important;
+  color: #5e81ac !important;
   margin: 15px 0 10px 0 !important;
 }
 
@@ -543,7 +589,7 @@
 
 .price-detail {
   font-size: 0.9rem !important;
-  color: #2e3440 !important;
+  color: #5e81ac !important;
 }
 
 .buy-button {
@@ -574,7 +620,7 @@
 
 .results-title {
   margin-bottom: 24px !important;
-  color: #2e3440 !important;
+  color: #5e81ac !important;
   text-align: center;
   font-weight: 600 !important;
 }
@@ -592,7 +638,7 @@
 }
 
 .section-header h3 {
-  color: #2e3440 !important;
+  color: #5e81ac !important;
   font-weight: 600 !important;
   margin: 0 !important;
 }
@@ -620,7 +666,7 @@
 
 .pokemon-name {
   font-weight: 700 !important;
-  color: #2e3440 !important;
+  color: #5e81ac !important;
 }
 
 .pokemon-id {
@@ -680,7 +726,7 @@
 }
 
 .section-title {
-  color: #2e3440 !important;
+  color: #5e81ac !important;
   font-weight: 600 !important;
   margin-bottom: 12px !important;
   border-bottom: 2px solid #d8dee9;
@@ -699,7 +745,7 @@
 }
 
 .detail-value {
-  color: #2e3440 !important;
+  color: #5e81ac !important;
   font-weight: 600 !important;
 }
 
@@ -755,7 +801,7 @@
 .stat-value {
   position: absolute;
   right: -35px;
-  color: #2e3440 !important;
+  color: #5e81ac !important;
   font-weight: 600 !important;
 }
 
@@ -789,7 +835,7 @@
 }
 
 .model-viewer-title {
-  color: #2e3440;
+  color: #5e81ac;
   font-weight: 600;
   text-align: center;
   margin-bottom: 8px;
