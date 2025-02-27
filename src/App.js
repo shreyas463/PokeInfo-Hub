@@ -19,6 +19,7 @@ function App() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
+  const [showSearchBox, setShowSearchBox] = useState(false);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -63,6 +64,14 @@ function App() {
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
+    setShowSearchBox(false);
+    setPokemonData(null);
+    setCardData(null);
+    setError(null);
+  };
+
+  const toggleSearchBox = () => {
+    setShowSearchBox(!showSearchBox);
   };
 
   return (
@@ -85,47 +94,57 @@ function App() {
 
           {activeTab === 0 && (
             <Box className="search-tab-content">
-              <Paper className="search-container">
-                <div className="title-container">
-                  <img src={pokeball} alt="Pokeball" className="pokeball-logo" />
-                  <Typography variant="h5" className="app-title">PokeInfo Hub</Typography>
-                </div>
-                
-                <form onSubmit={handleSearch} className="search-form">
-                  <TextField
-                    fullWidth
-                    variant="outlined"
-                    label="Enter Pokemon Name"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="search-input"
-                    size="small"
-                  />
+              {!showSearchBox ? (
+                <Box 
+                  className="search-prompt"
+                  onClick={toggleSearchBox}
+                >
+                  <Typography variant="h5" className="search-prompt-text">
+                    Click here to search for Pokémon
+                  </Typography>
+                </Box>
+              ) : (
+                <Paper className="search-container">
+                  <div className="title-container">
+                    <img src={pokeball} alt="Pokeball" className="pokeball-logo" />
+                    <Typography variant="h5" className="app-title">PokeInfo Hub</Typography>
+                  </div>
                   
-                  <FormControl fullWidth variant="outlined" size="small" className="display-option">
-                    <Select
-                      value={displayOption}
-                      onChange={(e) => setDisplayOption(e.target.value)}
+                  <form onSubmit={handleSearch} className="search-form">
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      label="Enter Pokemon Name"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="search-input"
+                      size="small"
+                    />
+                    
+                    <FormControl fullWidth variant="outlined" size="small" className="display-option">
+                      <Select
+                        value={displayOption}
+                        onChange={(e) => setDisplayOption(e.target.value)}
+                      >
+                        <MenuItem value="both">Show Both</MenuItem>
+                        <MenuItem value="pokemon">Pokemon Info Only</MenuItem>
+                        <MenuItem value="card">Trading Cards Only</MenuItem>
+                      </Select>
+                    </FormControl>
+                    
+                    <Button 
+                      type="submit" 
+                      variant="contained" 
+                      color="primary" 
+                      fullWidth
+                      className="search-button"
+                      disabled={loading}
                     >
-                      <MenuItem value="both">Show Both</MenuItem>
-                      <MenuItem value="pokemon">Pokemon Info Only</MenuItem>
-                      <MenuItem value="card">Trading Cards Only</MenuItem>
-                    </Select>
-                  </FormControl>
-                  
-                  <Button 
-                    type="submit" 
-                    variant="contained" 
-                    color="primary" 
-                    fullWidth
-                    className="search-button"
-                    disabled={loading}
-                  >
-                    {loading ? 'Searching...' : 'Search'}
-                  </Button>
-                </form>
-              </Paper>
-              
+                      {loading ? 'Searching...' : 'Search'}
+                    </Button>
+                  </form>
+                </Paper>
+              )}
               <div className="results-container">
                 {error && (
                   <Paper className="error-container">
