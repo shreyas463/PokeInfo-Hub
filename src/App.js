@@ -10,7 +10,7 @@ import backgroundImage from './backgrounpoke.jpg';
 import pokeballIcon from './assets/pokeball.svg';
 import './App.css';
 
-
+const POKEMON_TCG_API_KEY = 'db932cee-4682-406c-8e11-3c5c32cce377';
 
 function App() {
   const [pokemonData, setPokemonData] = useState(null);
